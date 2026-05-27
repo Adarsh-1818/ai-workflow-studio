@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { MessageSquare, Workflow, LayoutDashboard } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 

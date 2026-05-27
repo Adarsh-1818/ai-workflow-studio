@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import api from "../api/axios";
 import { useChatStore } from "../store/chatStore";
 import AppLayout from "../components/AppLayout";
