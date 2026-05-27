@@ -8,8 +8,5 @@ const auth_controller_1 = require("../controllers/auth.controller");
 const router = express_1.default.Router();
 router.post('/register', auth_controller_1.register);
 router.post('/login', auth_controller_1.login);
-router.post('/login', (req, res, next) => {
-    console.log("LOGIN ROUTE HIT");
-    next();
-}, auth_controller_1.login);
+router.post("/forgot-password", auth_controller_1.forgotPassword);
 exports.default = router;
