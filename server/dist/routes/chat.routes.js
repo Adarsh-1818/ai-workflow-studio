@@ -9,4 +9,5 @@ const router = express_1.default.Router();
 router.post("/new", chat_controller_1.newChat);
 router.post("/message", chat_controller_1.sendMessage);
 router.get("/:chatId", chat_controller_1.fetchMessages);
+router.delete("/:id", chat_controller_1.deleteChat);
 exports.default = router;

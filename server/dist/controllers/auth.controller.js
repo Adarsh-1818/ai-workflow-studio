@@ -7,12 +7,46 @@ exports.login = exports.register = exports.forgotPassword = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const prisma_1 = __importDefault(require("../config/prisma"));
 const generateToken_1 = __importDefault(require("../utils/generateToken"));
+const crypto_1 = __importDefault(require("crypto"));
+const email_service_1 = require("../services/email.service");
 const forgotPassword = async (req, res) => {
-    const { email } = req.body;
-    console.log("Password reset requested for:", email);
-    return res.json({
-        message: "Reset link sent successfully",
-    });
+    try {
+        const { email } = req.body;
+        const user = await prisma_1.default.user.findUnique({
+            where: { email },
+        });
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found",
+            });
+        }
+        const resetToken = crypto_1.default
+            .randomBytes(32)
+            .toString("hex");
+        const expiry = new Date(Date.now() + 1000 * 60 * 15);
+        await prisma_1.default.user.update({
+            where: { email },
+            data: {
+                resetToken,
+                resetTokenExpiry: expiry,
+            },
+        });
+        const resetLink = `
+${process.env.FRONTEND_URL}
+/reset-password/${resetToken}
+`;
+        await (0, email_service_1.sendResetEmail)(email, resetLink);
+        return res.json({
+            success: true,
+            message: "Reset email sent",
+        });
+    }
+    catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            message: "Failed to send reset email",
+        });
+    }
 };
 exports.forgotPassword = forgotPassword;
 const register = async (req, res) => {
