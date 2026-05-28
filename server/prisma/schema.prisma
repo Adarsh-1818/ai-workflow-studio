@@ -13,7 +13,8 @@ model User {
   email     String   @unique
   password  String
   createdAt DateTime @default(now())
-
+  resetToken       String?
+  resetTokenExpiry DateTime?
   prompts   Prompt[]
   workflows Workflow[]
 }
