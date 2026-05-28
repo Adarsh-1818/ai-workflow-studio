@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { createChat, saveMessage, getMessages } from "../services/chat.service";
+import prisma from '../config/prisma';
 
 export const newChat = async (req: Request, res: Response) => {
   const { userId, title } = req.body;
@@ -28,4 +29,41 @@ export const fetchMessages = async (req: Request, res: Response) => {
   const messages = await getMessages(chatId);
 
   res.json(messages);
+};
+
+export const deleteChat = async (
+  req: Request,
+  res: Response
+) => {
+
+  const id = req.params.id as string;
+
+  try {
+
+    await prisma.message.deleteMany({
+      where: {
+        chatId: id,
+      },
+    });
+
+    await prisma.chat.delete({
+      where: {
+        id,
+      },
+    });
+
+    return res.json({
+      success: true,
+      message: "Chat deleted successfully",
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    return res.status(500).json({
+      message: "Failed to delete chat",
+    });
+
+  }
 };

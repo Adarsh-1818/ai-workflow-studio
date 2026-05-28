@@ -12,7 +12,8 @@ export const forgotPassword = async (
 
   console.log("Password reset requested for:", email);
 
-  return res.json({
+  return res.status(200).json({
+    success: true,
     message: "Reset link sent successfully",
   });
 };

@@ -6,13 +6,41 @@ const ForgotPasswordPage = () => {
   const [email, setEmail] = useState("");
 
   const handleSubmit = async () => {
-    await api.post("/auth/forgot-password", {
-      email,
-    });
 
-    alert("Password reset link sent!");
+    try {
+  
+      if (!email) {
+        alert("Please enter email");
+        return;
+      }
+  
+      await api.post("/auth/forgot-password", {
+        email,
+      });
+  
+      alert(
+        "Password reset link sent successfully!"
+      );
+  
+      setEmail("");
+  
+    } catch (error) {
+  
+      console.error(error);
+  
+      alert("Failed to send reset link");
+  
+    }
   };
 
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (e.key === "Enter") {
+      handleSubmit();
+    }
+  };
+  
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-950 px-4">
 
@@ -31,6 +59,7 @@ const ForgotPasswordPage = () => {
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
 
         <button

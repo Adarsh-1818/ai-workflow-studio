@@ -60,6 +60,34 @@ const ChatPage = () => {
     setPrompt("");
   };
 
+  const handleDeleteChat = async (
+    chatId: string
+  ) => {
+  
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this chat?"
+    );
+  
+    if (!confirmed) return;
+  
+    try {
+  
+      await api.delete(`/chat/${chatId}`);
+  
+      setChats((prev) =>
+        prev.filter((chat) => chat.id !== chatId)
+      );
+  
+    } catch (error) {
+  
+      console.error(error);
+  
+      alert("Failed to delete chat");
+  
+    }
+  
+  };
+
   return (
     <AppLayout>
     <div className="h-screen flex bg-slate-950 text-white">
@@ -82,7 +110,15 @@ const ChatPage = () => {
               className="p-3 rounded bg-slate-800 cursor-pointer hover:bg-slate-700"
             >
               {chat.title}
+
+              <button
+    onClick={() => handleDeleteChat(chat.id)}
+    className="ml-3 text-red-400 hover:text-red-300"
+  >
+    🗑️
+  </button>
             </div>
+            
           ))}
         </div>
       </div>

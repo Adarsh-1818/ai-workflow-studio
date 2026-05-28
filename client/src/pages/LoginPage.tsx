@@ -83,6 +83,21 @@ const LoginPage = () => {
     }
   };
 
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+  
+    if (e.key === "Enter") {
+  
+      if (isRegister) {
+        handleRegister();
+      } else {
+        handleLogin();
+      }
+  
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-950 px-4">
 
@@ -102,6 +117,7 @@ const LoginPage = () => {
             placeholder="Full Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            onKeyDown={handleKeyDown}
           />
         )}
 
@@ -110,6 +126,7 @@ const LoginPage = () => {
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
 
         <input
@@ -118,6 +135,7 @@ const LoginPage = () => {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
 
         <div className="flex justify-end mb-6">
